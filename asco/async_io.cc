@@ -48,14 +48,14 @@ IOManager::IOManager(size_t threads, bool use_caller, std::string_view name) : S
         if (idleThreadCount_ == 0) {    
             return;
         }
-        ASCO_LOG_INFO(g_logger) << "tickle!";
+        ASCO_LOG_DEBUG(g_logger) << "tickle!";
         auto sqe = io_uring_get_sqe_safe();
         io_uring_prep_write(sqe, tickleFds_[1], "", 1, 0);
         // io_uring_sqe_set_data(sqe, nullptr);
     };
 
     idle_ = [this]() -> Coroutine {
-        ASCO_LOG_INFO(g_logger) << "idle";
+        ASCO_LOG_DEBUG(g_logger) << "idle";
         while (true) {
             if (ASCO_UNLIKELY(stopping())) {
                 ASCO_LOG_FMT_INFO(g_logger, "IOManager name = %s idle stopping exit", Scheduler::getName().c_str());

@@ -13,6 +13,7 @@ int main(int argc, char** argv) {
 
     if (argc < 3) {
         ASCO_LOG_INFO(g_logger) << "argc < 3...";
+        return 1;
     }
 
     ip = argv[1];

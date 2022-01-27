@@ -42,5 +42,7 @@ asco_add_executable(test_coroutine "tests/test_coroutine.cc" "${LIBS}")
 asco_add_executable(test_scheduler "tests/test_scheduler.cc" "${LIBS}")
 asco_add_executable(test_async_io "tests/test_async_io.cc" "${LIBS}")
 
+asco_add_executable(example1 "examples/example1.cc" "${LIBS}")
+
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
