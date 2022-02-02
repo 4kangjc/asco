@@ -136,6 +136,20 @@ Awaiter_io async_writev(int fd, const struct iovec* iov, unsigned int nr_vecs, u
     return Awaiter_io(sqe);
 }
 
+Awaiter_io async_read_fixed(int fd, void* buf, unsigned long nbytes, unsigned long long offset, int buf_index) {
+    IOManager::GetThis()->pendingEventCount_++;
+    auto sqe = io_uring_get_sqe_safe();
+    io_uring_prep_read_fixed(sqe, fd, buf, nbytes, offset, buf_index);
+    return Awaiter_io(sqe);
+}
+
+Awaiter_io async_write_fixed(int fd, const void* buf, unsigned long nbytes, unsigned long long offset, int buf_index) {
+    IOManager::GetThis()->pendingEventCount_++;
+    auto sqe = io_uring_get_sqe_safe();
+    io_uring_prep_write_fixed(sqe, fd, buf, nbytes, offset, buf_index);
+    return Awaiter_io(sqe);
+}
+
 Awaiter_io async_recvmsg(int sockfd, msghdr* msg, uint32_t flags) {
     IOManager::GetThis()->pendingEventCount_++;
     auto sqe = io_uring_get_sqe_safe();
@@ -190,6 +204,22 @@ Awaiter_io async_timeout(__kernel_timespec* ts) {
     auto sqe = io_uring_get_sqe_safe();
     io_uring_prep_timeout(sqe, ts, 0, 0);
     return Awaiter_io(sqe);
+}
+
+thread_local std::vector<std::unique_ptr<__kernel_timespec>> ts;
+
+Awaiter_io async_sleep(long long sec) {
+    ts.push_back(std::make_unique<__kernel_timespec>(sec, 0));
+    return async_timeout(ts.back().get());
+}
+
+Awaiter_io async_usleep(long long usec) {
+    ts.push_back(std::make_unique<__kernel_timespec>(0, usec));
+    return async_timeout(ts.back().get());
+}
+
+void register_buffers(const struct iovec *iovecs, unsigned nr_iovecs) {
+    io_uring_register_buffers(&s_uring.ring, iovecs, nr_iovecs);
 }
 
 } // namespace asco
