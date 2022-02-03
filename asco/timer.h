@@ -14,7 +14,7 @@ friend class IOManager;
 public:
     using ptr = std::shared_ptr<Timer>;
     // 取消定时器
-    void cacel();
+    void cancel();
     // 
     template <class... Args>
     void reset(long long ms, Args&&... args) {

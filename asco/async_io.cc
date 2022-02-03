@@ -27,13 +27,13 @@ thread_local __io__uring__ s_uring;
 
 io_uring_sqe* io_uring_get_sqe_safe() noexcept {
     auto sqe = io_uring_get_sqe(&s_uring.ring);
-    if (ASCO_LIKELY(sqe)) {
+    if (sqe) [[likely]] {
         return sqe;
-    } else {
+    } else [[unlikely]] {
         ASCO_LOG_INFO(g_logger) << "SQ is full, flushing ";
         io_uring_submit(&s_uring.ring);
         sqe = io_uring_get_sqe(&s_uring.ring);
-        if (ASCO_LIKELY(sqe)) {
+        if (sqe) [[likely]] {
             return sqe;
         }
         ASCO_LOG_ERROR(g_logger) << "is null";
@@ -57,7 +57,7 @@ IOManager::IOManager(size_t threads, bool use_caller, std::string_view name) : S
     idle_ = [this]() -> Coroutine {
         ASCO_LOG_DEBUG(g_logger) << "idle";
         while (true) {
-            if (ASCO_UNLIKELY(stopping())) {
+            if (stopping()) [[unlikely]] {
                 ASCO_LOG_FMT_INFO(g_logger, "IOManager name = %s idle stopping exit", Scheduler::getName().c_str());
                 break;
             }

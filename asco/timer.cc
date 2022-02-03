@@ -49,7 +49,7 @@ __kernel_timespec* Timer::getTs() {
     return &ts_; 
 }
 
-void Timer::cacel() {
+void Timer::cancel() {
     LOCK_GUARD(manager_->timer_mutex_);
     ts_.tv_nsec = ts_.tv_sec = 0;
     cb_ = nullptr;

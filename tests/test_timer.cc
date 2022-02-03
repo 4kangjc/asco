@@ -40,12 +40,17 @@ int main() {
     // iom.schedule(test_sleep2());
     // iom.schedule(test_sleep3());
     // iom.schedule(test_read_fixed());
-    auto timer = iom.addTimer(1000, true, [](){
-        ASCO_LOG_INFO(g_logger) << "Hello World";
+    asco::Timer::ptr timer;
+    timer = iom.addTimer(1000, true, [&timer](){
+        static int i = 0;
+        ASCO_LOG_INFO(g_logger) << "Hello Timer";
+        if (++i == 5) {
+            timer->cancel();
+        }
     });
     // timer->cacel();
-    timer->reset(1000, [](){
-        ASCO_LOG_INFO(g_logger) << "Hello reset!";
-    });
-    timer->setRecurring(false);
+    // timer->reset(1000, [](){
+    //     ASCO_LOG_INFO(g_logger) << "Hello reset!";
+    // });
+    // timer->setRecurring(false);
 }   
