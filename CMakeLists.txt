@@ -6,6 +6,7 @@ include (cmake/utils.cmake)
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -ggdb -std=c++2a -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
 
 include_directories(./)
+include_directories(third_party/json)
 
 set(LIB_SRC
     asco/log.cc
@@ -16,6 +17,7 @@ set(LIB_SRC
     asco/scheduler.cc
     asco/async_io.cc
     asco/timer.cc
+    asco/config.cc
 )
 
 
@@ -43,6 +45,7 @@ asco_add_executable(test_coroutine "tests/test_coroutine.cc" "${LIBS}")
 asco_add_executable(test_scheduler "tests/test_scheduler.cc" "${LIBS}")
 asco_add_executable(test_async_io "tests/test_async_io.cc" "${LIBS}")
 asco_add_executable(test_timer "tests/test_timer.cc" "${LIBS}")
+asco_add_executable(test_config "tests/test_config.cc" "${LIBS}")
 
 asco_add_executable(example1 "examples/example1.cc" "${LIBS}")
 

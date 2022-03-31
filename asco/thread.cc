@@ -6,7 +6,7 @@ namespace asco {
 static thread_local Thread* t_thread = nullptr;
 static thread_local std::string t_name = "UNKOWN";
 static thread_local uint64_t t_start = 0;                  // 线程开始运行的时间 毫秒数
-
+static thread_local int t_id = -1;
 
 Thread::~Thread() {
     if (thread_) {
@@ -31,6 +31,13 @@ const std::string& Thread::GetName() {
 
 uint32_t Thread::GetStartTime() {
     return t_start;
+}
+
+pid_t Thread::GetThreadId() {
+    if (t_id == -1) {
+        t_id = gettid();
+    }
+    return t_id;
 }
 
 void Thread::SetName(std::string_view name) {

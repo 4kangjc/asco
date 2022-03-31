@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include <typeinfo>
+#include <cxxabi.h>
 
 namespace asco {
 
@@ -31,9 +33,9 @@ time_t StrToTime(const char* str, const char* fmt = "%Y-%m-%d %H:%M:%S");
 std::string format(const char* fmt, ...);
 std::string format(const char* fmt, va_list ap);
 // 查找元素 [begin, end) 找不到返回end, find_first -> 是否从前往后找
-template <typename Iter, typename T>
-Iter find(Iter&& begin, Iter&& end, T&& val, bool find_first = true) {
-    if (find_first) {
+template <typename Iter, typename T, bool find_first = true>
+Iter find(Iter&& begin, Iter&& end, T&& val) {
+    if constexpr (find_first) {
         for (auto it = begin; it != end; ++it) {
             if (*it == val) {
                 return it;
@@ -55,4 +57,10 @@ void Backtrace(std::vector<std::string>& bt, int size = 64, int skip = 1);
 //获得函数调用堆栈信息字符串
 std::string BacktraceToString(int size = 64, int skip = 2, const std::string& prefix = "");
 
+template<class T>
+const char* TypeToName() {
+    static const char* s_name = abi::__cxa_demangle(typeid(T).name(), nullptr, nullptr, nullptr);
+    return s_name;
 }
+
+} // namespace asco

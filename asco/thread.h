@@ -31,6 +31,8 @@ public:
     static const std::string& GetName();
     // 设置当前线程的名称
     static void SetName(std::string_view name);  
+    // 返回当前线程的真实id
+    static pid_t GetThreadId();
     // 返回当前线程开始的毫秒数 不包括主线程
     static uint32_t GetStartTime();
 private:

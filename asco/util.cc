@@ -19,7 +19,8 @@ static auto g_logger = ASCO_LOG_NAME("system");
 namespace asco {
 
 int GetThreadId() {
-    return syscall(SYS_gettid);
+    // return syscall(SYS_gettid);
+    return Thread::GetThreadId();
 }
 
 const std::string& GetThreadName() {
