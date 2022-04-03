@@ -6,14 +6,19 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include <boost/lexical_cast.hpp>
+// #include <boost/lexical_cast.hpp>
 
 namespace asco {
 
 template <typename F, typename T>
 struct LexicalCastJson {
     T operator() (const F& v) {
-        return boost::lexical_cast<T>(v);
+        // return boost::lexical_cast<T>(v);
+        T result;
+        std::stringstream ss;
+        ss << v;
+        ss >> result;
+        return result;
     }
 };
 

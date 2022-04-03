@@ -63,7 +63,7 @@ public:
     auto getCountent() const { return ss_.str(); }
     auto& getSS() { return ss_; }
     const auto& getThreadName() const { return thread_name_; }
-
+    // TODO cpp 20 std::format
     void format(const char* fmt, ...) {
         va_list ap;
         va_start(ap, fmt);
